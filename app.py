@@ -7,13 +7,14 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=['GET'])
 def verify():
     # when the endpoint is registered as a webhook, it must echo back
     # the 'hub.challenge' value it receives in the query arguments
+    WEBHOOK_TOKEN = "salah_786"
+
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
-        if not request.args.get("hub.verify_token") == os.environ["VERIFY_TOKEN"]:
+        if not request.args.get("hub.verify_token") == WEBHOOK_TOKEN:
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
 
@@ -54,11 +55,13 @@ def webhook():
 
 
 def send_message(recipient_id, message_text):
+    
+    PAGE_TOKEN = "EAAILQHz6D6sBAM9YQRHmZCnD9yVijCgzaVmQJ9uYK7yZAko3PG9ae3VVQ8af05aiB3e9q6wkRA03c1aGvnyiIYs3zxwyab3w6aNhM9C6ZAt1CutqExRd9TA9NEBZC3Qu2yMTMVEBLsiLF00iKEwtoZBZABMQCcYpOMwsMV7ZBwtUQZDZD"
 
     log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
 
     params = {
-        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
+        "access_token": PAGE_TOKEN
     }
     headers = {
         "Content-Type": "application/json"
